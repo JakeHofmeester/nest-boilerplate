@@ -1,0 +1,36 @@
+# Opdracht
+
+In de boilerplate staat al een /example route met een GET en een POST om voorbeelden te zien.
+Via localhost:3000/docs kun je swagger aanroepen om de API docs te bekijken. (Worden automatisch gegenereerd)
+
+
+De API moet wel veilig zijn. Daarom moet er een vorm van authenticatie in zitten. Dat mag via username-password, etc...
+Maar moet wel via NestJS's Guard pattern geimplementeerd worden.
+
+# Features
+1. User Authentication
+  - Sign Up op een manier
+  - Inloggen
+  - JWT-based (oid) authentication
+
+2. Task Management (CRUD)
+  - Taken aanmaken:
+    Een taak bevat een titel, beschrijving en due-date. Ook een optionele file-attachment
+    Elke taak moet aan een gebruiker gekoppeld worden.
+  - Taken bekijken:
+    Een gebruiker mag alleen zijn eigen taken ophalen
+    Bij een taak moet aangegeven worden of deze over-due is
+    Ook moet elke taak een status hebben open, in-progress en done
+  - Update task:
+    Een gebruiker mag alleen zijn eigen taken updaten
+    Alle velden moeten aangepast kunnen worden (titel, beschrijving, due-date en status)
+  - Delete task:
+    Gebruikers moeten alleen hun eigen taken kunnen verwijderen
+
+3. File upload:
+  - Elke taak zou 1 attachment mogen hebben (document, image, etc...)
+  - Gebruik 'Multer' als file-upload middleware
+  - Limiteer image files naar png, jpg, jpeg en pdf (max 2MB)
+  - Sla de bestanden op in een lokale folder /uploads
+  - Endpoint om de files te downloaden.
+    Bij elke task moet een download_link voor de attachment staat, met een linkje naar waar het bestand gedownload kan worden

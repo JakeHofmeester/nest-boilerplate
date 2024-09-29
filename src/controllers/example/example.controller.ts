@@ -19,7 +19,7 @@ export class ExampleController {
   @Post()
   @ApiCreatedResponse({ type: CreateExampleResponseDto })
   createExample(
-    @Body() body: CreateExampleRequestDto,
+    @Body() body: CreateExampleRequestDto
   ): Promise<CreateExampleResponseDto> {
     return this.appService.createExample(body.name);
   }

@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 export class ExampleService {
   constructor(
     @InjectRepository(Example)
-    private readonly exampleRepository: Repository<Example>,
+    private readonly exampleRepository: Repository<Example>
   ) {}
 
   getExamples(): Promise<Example[]> {
