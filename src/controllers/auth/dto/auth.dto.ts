@@ -1,9 +1,11 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+//import swagger
 
 export class SignupDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
+  // figure out swagger shizzle
 
   @IsString()
   @IsNotEmpty()
