@@ -4,9 +4,10 @@ import { AuthService } from './auth.service';
 import { AuthController } from '~/controllers/auth/auth.controller';
 import { DatabaseModule } from '../database/database.module';
 import { User } from '~/entities/users.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User]), JwtModule.register({})],
   controllers: [AuthController],
   providers: [AuthService, DatabaseModule],
 })

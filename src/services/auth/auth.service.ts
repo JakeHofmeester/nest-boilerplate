@@ -3,17 +3,21 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as argon from 'argon2';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { User } from '~/entities/users.entity';
 import { SignupDto, SigninDto } from '~/controllers/auth/dto/auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
-    private readonly user: Repository<User>
+    private readonly user: Repository<User>,
+    private jwt: JwtService,
+    private config: ConfigService
   ) {}
 
   async signup(dto: SignupDto) {
@@ -28,15 +32,13 @@ export class AuthService {
       });
 
       const savedUser = await this.user.save(newUser);
+      delete savedUser.password;
 
-      delete newUser.password;
+      const access_token = await this.signToken(savedUser.id, savedUser.email);
 
       return {
         message: 'Successfully registered',
-        user: {
-          id: savedUser.id,
-          ...savedUser,
-        },
+        access_token,
       };
     } catch (error) {
       if (
@@ -50,26 +52,38 @@ export class AuthService {
   }
 
   async signin(dto: SigninDto) {
-    // find the user by email
     const user = await this.user.findOne({ where: { email: dto.email } });
-    //if user does not exist throw exception
+
     if (!user) {
       throw new UnauthorizedException('No user found with this email address.');
     }
-    // compare passwords
+
     const PwMatch = await argon.verify(user.password, dto.password);
-    //if password incorrect throw exception
+
     if (!PwMatch) {
       throw new UnauthorizedException('Incorrect password');
     }
-    //send back the user
-    delete user.password;
+
+    const access_token = await this.signToken(user.id, user.email);
+
     return {
-      message: 'Login successful',
-      user: {
-        id: user.id,
-        ...user,
-      },
+      access_token,
     };
+  }
+
+  async signToken(userId: number, email: string): Promise<string> {
+    const payload = {
+      sub: userId,
+      email,
+    };
+
+    const secret = this.config.get('JWT_SECRET');
+
+    const token = await this.jwt.signAsync(payload, {
+      expiresIn: '15m',
+      secret: secret,
+    });
+
+    return token;
   }
 }
