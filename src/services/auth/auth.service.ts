@@ -32,7 +32,6 @@ export class AuthService {
       });
 
       const savedUser = await this.user.save(newUser);
-      delete savedUser.password;
 
       const access_token = await this.signToken(savedUser.id, savedUser.email);
 
