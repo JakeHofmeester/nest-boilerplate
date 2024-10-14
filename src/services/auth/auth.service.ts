@@ -85,4 +85,8 @@ export class AuthService {
 
     return token;
   }
+
+  async getUserById(userId: number): Promise<User | null> {
+    return this.user.findOne({ where: { id: userId } });
+  }
 }
