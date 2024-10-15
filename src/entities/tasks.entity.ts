@@ -32,6 +32,9 @@ export class Task {
   @Column({ type: 'text', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: string;
 
+  @Column({ type: 'varchar' })
+  dueDate: string;
+
   @UpdateDateColumn({
     type: 'text',
     default: () => 'CURRENT_TIMESTAMP',

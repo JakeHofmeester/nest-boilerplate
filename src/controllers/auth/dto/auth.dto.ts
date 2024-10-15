@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-//import swagger
 
 export class SignupDto {
   @IsEmail()
@@ -10,7 +9,6 @@ export class SignupDto {
     example: 'johndoe@email.com',
   })
   email: string;
-  // figure out swagger shizzle
 
   @IsString()
   @IsNotEmpty()
